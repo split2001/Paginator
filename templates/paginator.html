@@ -1,0 +1,59 @@
+{% extends 'C:\Users\davla\PycharmProjects\Plagination\plagination\templates\menu.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Список постов</h1>
+
+    <!-- Выпадающий список для выбора количества элементов -->
+    <form method="get" class="mb-4">
+        <label for="posts_on_page">Количество элементов на странице:</label>
+        <select name="posts_on_page" id="posts_on_page" onchange="this.form.submit()">
+            <option value="3" {% if posts_on_page == 3 %}selected{% endif %}>3</option>
+            <option value="5" {% if posts_on_page == 5 %}selected{% endif %}>5</option>
+            <option value="10" {% if posts_on_page == 10 %}selected{% endif %}>10</option>
+        </select>
+        <noscript><button type="submit">Применить</button></noscript>
+    </form>
+
+    <!-- Список постов -->
+    <ul class="list-group">
+        {% for post in page_obj %}
+            <li class="list-group-item">
+                <h5>{{ post.title }}</h5>
+                <small class="text-muted">Дата: {{ post.created_at|date:"d.m.Y H:i" }}</small>
+                <p>{{ post.content }}</p>
+            </li>
+        {% empty %}
+            <p>Нет постов.</p>
+        {% endfor %}
+    </ul>
+
+    <!-- Пагинация -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+            <p>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</p>
+        </div>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&posts_on_page={{ posts_on_page }}">&laquo; Первая</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&posts_on_page={{ posts_on_page }}">Назад</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&posts_on_page={{ posts_on_page }}">Вперед</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&posts_on_page={{ posts_on_page }}">Последняя &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
