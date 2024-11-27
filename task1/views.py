@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from .models import Post
+from rest_framework import generics
+from .serializer import PostSerializer
 
 
 def function(request):
@@ -30,3 +32,8 @@ def menu(request):
     return render(request, 'menu.html')
 
 # Create your views here.
+
+
+class PostAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer

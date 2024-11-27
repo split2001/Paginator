@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from task1.views import function, menu
+from task1.views import function, menu, PostAPIView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', function)
+    path('', function),
+    path('api/postlist', PostAPIView.as_view())
 ]
